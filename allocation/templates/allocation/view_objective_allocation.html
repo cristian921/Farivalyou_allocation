@@ -1,0 +1,121 @@
+{% include 'allocation/base.html' %}
+{% load humanize %}
+{% load static %}
+{% load nvd3_tags %}
+{% include_chart_jscss %}
+{% load_chart charttype chartdata chartcontainer%}
+{% load_chart charttype chartdata1 chartcontainer1%}
+{% block content %}
+     <div class="container d-flex justify-content-end">
+            <a class="btn btn-primary text-white" href="/allocation/deleteAllSolution/" onclick="myFunction()">Delete all solution</a>
+     </div>
+    <br/>
+    <div class="container">
+        <div class="d-flex justify-content-center">
+            <table class="table table-borderless">
+                 <thead>
+                    <tr>
+                        <th>Asset</th>
+                        <th>Available Quotes</th>
+                        <th>Used Quotes</th>
+                        <th>Remaining Quotes</th>
+                    </tr>
+                 </thead>
+                <tbody>
+                    {% for a in portfolio_user %}
+                        <tr>
+                            <td>{{ a.asset.name }}</td>
+                            <td>{{ a.quote|val|intcomma }}</td>
+                            <td>{{ quotes_used|get_item:a.asset.codec|val|intcomma }}</td>
+                            <td>{{ quotes_remaining|get_item:a.asset.codec|val|intcomma }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% include_container chartcontainer1 400 400%}
+        </div>
+    </div>
+
+    <div class="container">
+        <table class="table table-borderless">
+         <thead>
+            <tr>
+                <th scope="col">Finality</th>
+                <th scope="col">Value</th>
+                <th scope="col">Time Horizon</th>
+                <th scope="col">Savings Required</th>
+                <th scope="col">Value</th>
+                <th scope="col">Annualized Return</th>
+                <th scope="col">Risk</th>
+                <th scope="col">Feasible</th>
+                <th scope="col"></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for os in objective_solution %}
+                <tr>
+                    <td>{{ os.objective.finality }}</td>
+                    <td>{{ os.objective.finalValue|val|intcomma }} €</td>
+                    <td>{{ os.objective.time_horizon }} years</td>
+                    <td>{{ os.savings_required|val|intcomma }}€</td>
+                    <td>{{ values|get_item:os.id|val|intcomma }}€</td>
+                    <td>{{ os.expected_return|percentage }}%</td>
+                    <td>{{ os.expected_risk|percentage }}%</td>
+                    <td>{{ os.feasible }}</td>
+                    <td>
+                        <a class="btn btn-danger btn-sm" href="/allocation/{{ os.id }}/deleteSolution/">Delete</a>
+                    </td>
+                    <td>
+                        {% if portfolios %}
+                            <a class="btn btn-primary btn-sm text-white" data-toggle="collapse" data-target="#udd{{ os.id }}">View</a>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+
+        </tbody>
+    </table>
+    </div>
+    <div class="accordion container" id="accordionExample">
+        {% for os in objective_solution %}
+        <div class="collapse" id="udd{{ os.id }}" data-parent="#accordionExample">
+            <h5>{{ os.objective.finality }}</h5>
+            <table class="table table-borderless">
+                <thead>
+                    <tr>
+                        <th scope="col">Asset</th>
+                        <th scope="col">Quote</th>
+                        <th scope="col">Price</th>
+                        <th scope="col">Weight</th>
+                        <th scope="col">Expected Annualized Return</th>
+                        <th scope="col">Expected Risk</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if portfolios %}
+                        {% for a in portfolios|get_item:os.id %}
+                            <tr>
+                                <td>{{ a.asset }}</td>
+                                <td>{{ a.quote|val }}</td>
+                                <td>{{ prices|get_item:os.id|get_price:a.asset.codec|val|intcomma }}€</td>
+                                <td>{{ weights|get_item:os.id|get_item:a.asset.codec|percentage }}%</td>
+                                <td>{{ returns|get_item:os.id|get_item:a.asset.codec|percentage }}%</td>
+                                <td>{{ risks|get_item:os.id|get_item:a.asset.codec|percentage}}%</td>
+                                <td></td>
+                            </tr>
+                        {% endfor %}
+                    {% endif %}
+                </td>
+                </tbody>
+            </table>
+        </div>
+    {% endfor %}
+    </div>
+
+    <script>
+        $('body').addClass('loaded');
+        function myFunction() {
+            $('body').removeClass('loaded');
+        }
+    </script>
+{% endblock %}

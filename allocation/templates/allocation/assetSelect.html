@@ -1,0 +1,17 @@
+{% extends 'allocation/base.html' %}
+
+{% block content %}
+
+    <form action="/allocation/assetForm/" method="post">
+         {% csrf_token %}
+            {{ form.as_p }}
+        <input type="submit" value="Select">
+    </form>
+
+    <script>
+        $('body').addClass('loaded');
+        function myFunction() {
+            $('body').removeClass('loaded');
+        }
+    </script>
+{% endblock %}

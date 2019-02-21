@@ -1,0 +1,169 @@
+{% extends 'allocation/base.html' %}
+{% load humanize %}
+
+{% block content %}
+    <div class="container">
+        <div class="d-flex align-items-center">
+            <div class="container">
+                <div class="container">
+                    <div class="d-flex justify-content-between">
+                         <h5><strong>Objectives</strong></h5>
+                         <a class="text-white btn btn-primary btn-sm" href="/allocation/addObjective/">Add Objective</a>
+                    </div>
+                </div>
+                <div class="container">
+                         <table class="table table-borderless">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Finality</th>
+                                    <th scope="col">Value</th>
+                                    <th scope="col">Time Horizon</th>
+                                    <th scope="col">Priority</th>
+                                    <th scope="col"></th>
+                                    <th scope="col"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% if objectives %}
+                                    {% for o in objectives %}
+                                        <tr>
+                                            <td>{{ o.finality }}</td>
+                                            <td>{{ o.finalValue|intcomma}} €</td>
+                                            <td>{{ o.time_horizon }} anni</td>
+                                            <td>{{ o.priority }}</td>
+                                            <td>
+                                                <a class="text-white btn btn-danger btn-sm" href="/allocation/{{ o.id }}/deleteObjective/">Delete</a>
+                                            </td>
+                                            <td>
+                                                <a class="text-white btn btn-primary btn-sm" href="/allocation/{{ o.id }}/updateObjective/">Update</a>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                {% endif %}
+                            </tbody>
+                        </table>
+                    </div>
+            </div>
+            <div class="container">
+                 {% if resources %}
+                     {% for r in resources %}
+                        <div class="container">
+                            <div class="container">
+                                <div class="d-flex justify-content-between">
+                                    <h5 class="card-title text-center"><strong>Resources</strong></h5>
+                            </div>
+                        </div>
+                         <div class="container">
+                            <div class="d-flex justify-content-center">
+                                <p class="card-text"><strong>Founds: </strong>{{ r.founds|intcomma }} €</p>
+                                <p class="card-text"><strong>Monthly Savings: </strong>{{ r.monthly_savings|intcomma }} €</p>
+                            </div>
+                            <br/>
+                            <div class="d-flex justify-content-center">
+                                <a class="text-white btn btn-primary btn-sm" href="/allocation/{{ r.id }}/updateResources/">Modify</a>
+                            </div>
+                        </div>
+                     {% endfor %}
+                  {% else %}:
+                     <a class="text-white btn btn-primary" href="/allocation/addResources/">Add Resources</a>
+                 {% endif %}
+            </div>
+        </div>
+        <br/>
+        </div>
+    </div>
+    <div class="container">
+            <div class="container">
+                    {% if portfolio %}
+                        <div class="container">
+                            <div class="d-flex justify-content-center">
+                                <a href="/allocation/objectivesAllocation" class="btn btn-primary" onclick="myFunction()">Objectives Allocation</a></div>
+                            </div>
+                        {% for po in portfolio %}
+                            <div class="container">
+                                <div class="container">
+                                    <div class="d-flex justify-content-between">
+                                        <h5><strong>Portfolio</strong></h5>
+                                        <a class="text-white btn btn-danger btn-sm" href="/allocation/{{ po.id }}/deleteAggregatedPortfolio/">Delete</a>
+                                    </div>
+                                </div>
+                                <div class="d-flex justify-content-between">
+                                    <div class="container">
+                                        <p class="card-text"><strong>Portfolio name:</strong> {{ po.name }}</p>
+                                        <p class="card-text"><strong>Start Date:</strong> {{ po.start_date }}</p>
+                                    </div>
+                                    <div  class="container">
+                                        <p class="card-text"><strong>Value:</strong> {{ value|val|intcomma }}€</p>
+                                        <p class="card-text"><strong>Initial Value:</strong> {{ initial_value|val|intcomma }}€</p>
+                                    </div>
+                                    <div  class="container">
+                                        <p class="card-text"><strong>Absolute Return:</strong> {{ portfolio_absolute_return|percentage }}%</p>
+                                        <p class="card-text"><strong>Annualized Return:</strong> {{ portfolio_annualized_return|percentage }}%</p>
+                                        <p class="card-text"><strong>Risk:</strong> {{ portfolio_risk|percentage }}%</p>
+                                    </div>
+                                </div>
+                                <div class="d-flex flex-column bd-highlight mb-3">
+                                    <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#infoport" aria-expanded="false" aria-controls="collapseExample">More info...</button>
+                                </div>
+                            </div>
+                            <div class="container">
+                                <div class="collapse" id="infoport">
+                                 <div class="container">
+                                <table class="table table-borderless">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Name</th>
+                                            <th scope="col">Quote</th>
+                                            <th scope="col">Start Price</th>
+                                            <th scope="col">Actual Price</th>
+                                            <th scope="col">Percentage</th>
+                                            <th scope="col">Absolute Return</th>
+                                            <th scope="col">Annualized Return</th>
+                                            <th scope="col">Risk</th>
+                                            <th scope="col"></th>
+                                            <th scope="col"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% if assetPortfolio %}
+                                            {% for p in assetPortfolio %}
+                                                <tr>
+                                                    <td>{{ p.asset }}</td>
+                                                    <td>{{ p.quote }}</td>
+                                                    <td>{{ initial_prices|get_price:p.asset.codec|val|intcomma }}</td>
+                                                    <td>{{ prices|get_price:p.asset.codec|val|intcomma }}€</td>
+                                                    <td>{{ weights|get_item:p.asset.codec }}%</td>
+                                                    <td>{{ assets_absolute_return|get_item:p.asset.codec|percentage }}%</td>
+                                                    <td>{{ assets_annualized_return|get_item:p.asset.codec|percentage }}%</td>
+                                                    <td>{{ assets_risk|get_item:p.asset.codec|percentage }}%</td>
+                                                    <td>
+                                                        <a class="text-white btn btn-danger btn-sm" href="/allocation/{{ p.id }}/deletePortfolioAsset/">Delete</a>
+                                                    </td>
+                                                    <td>
+                                                        <a class="text-white btn btn-primary btn-sm" href="/allocation/{{ p.id }}/updatePortfolioAsset/">Update</a>
+                                                    </td>
+                                                </tr>
+                                            {% endfor %}
+                                        {% endif%}
+                                    </tbody>
+                                </table>
+                            </div>
+                                 <div class="container">
+                                     <a href="/allocation/{{ po.id }}/addAssetPortfolio/" class="text-white btn btn-primary">Add</a>
+                                 </div>
+                            </div>
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                         <a href="/allocation/addAggregatedPortfolio/" class="btn btn-primary text-center">Create Portfolio</a>
+                    {% endif %}
+                </div>
+        </div>
+
+    <script>
+        $('body').addClass('loaded');
+        function myFunction() {
+            $('body').removeClass('loaded');
+        }
+    </script>
+{% endblock %}

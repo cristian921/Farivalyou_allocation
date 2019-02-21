@@ -1,0 +1,18 @@
+{% extends 'allocation/base.html' %}
+
+{% block content %}
+    <div class="container">
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <input class="button btn-primary" type="submit" value="ADD">
+        </form>
+    </div>
+
+    <script>
+        $('body').addClass('loaded');
+        function myFunction() {
+            $('body').removeClass('loaded');
+        }
+    </script>
+{% endblock %}

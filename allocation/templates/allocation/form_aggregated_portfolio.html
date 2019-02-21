@@ -1,0 +1,30 @@
+{% extends 'allocation/base.html' %}
+
+{% block content %}
+
+    <div class="container">
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <input class="button btn-primary" type="submit" value="ADD">
+        </form>
+    </div>
+    <script>
+      $(function() {
+          $( ".datepicker" ).datepicker({
+              changeMonth: true,
+              changeYear: true,
+              yearRange: "1900:2012",
+              daysOfWeekDisabled: [0,6],
+
+        });
+      });
+
+       $('body').addClass('loaded');
+        function myFunction() {
+            $('body').removeClass('loaded');
+        }
+
+      </script>
+
+{% endblock %}

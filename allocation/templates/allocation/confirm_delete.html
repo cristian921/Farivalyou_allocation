@@ -1,0 +1,11 @@
+<h1>Delete</h1>
+<form method="post">{% csrf_token %}
+    Are you sure you want to delete "{{ object }}" ?
+    <input type="submit" value="Submit" />
+    <script>
+        $('body').addClass('loaded');
+        function myFunction() {
+            $('body').removeClass('loaded');
+        }
+    </script>
+</form>
