@@ -56,12 +56,12 @@ import json
 
 
 def optimize_ob(objectives, returns, risks, corr, initial_prices, max_quotes, actual_price):
-    print "max_quotes", max_quotes
-    print "returns", json.dumps(returns, indent=2)
-    print "risks", json.dumps(risks, indent=2)
-    print "initial price", json.dumps(initial_prices, indent=2)
-    print "corr", corr
-    print "actual price", actual_price
+   # print "max_quotes", max_quotes
+#    print "returns", json.dumps(returns, indent=2)
+  #  print "risks", json.dumps(risks, indent=2)
+  #  print "initial price", json.dumps(initial_prices, indent=2)
+ #   print "corr", corr
+  #  print "actual price", actual_price
 
     for key in returns:
         returns[key] = collections.OrderedDict(sorted(returns[key].items()))
@@ -80,10 +80,10 @@ def optimize_ob(objectives, returns, risks, corr, initial_prices, max_quotes, ac
             else:
                 feasible = False
                 sol = sols[1][0]
-            print "value objective", objectives[obk]["value_minus_savings"]
-            print "quote", sol.variables
-            print "constraints", sol.constraints
-            print "objectives", sol.objectives
+           # print "value objective", objectives[obk]["value_minus_savings"]
+         #   print "quote", sol.variables
+          #  print "constraints", sol.constraints
+          #  print "objectives", sol.objectives
             sol_quote = dict()
             i = 0
             for asset in max_quotes:
@@ -103,7 +103,7 @@ def optimize_ob(objectives, returns, risks, corr, initial_prices, max_quotes, ac
                 if val > 10:
                     max_quotes[asset] -= sol.variables[i]
                 else:
-                    print "deleted", asset
+                    #print "deleted", asset
                     del max_quotes[asset]
                     for obk1 in objectives:
                         del risks[objectives[obk1]["time_horizon"]][asset]

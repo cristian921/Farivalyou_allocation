@@ -47,7 +47,7 @@ def absolute_return(start_price, end_price):
 
 
 def annualized_return(start_price, end_price, time):
-    print "an_r", time, (end_price / start_price) ** (1 / time) - 1
+    #print "an_r", time, (end_price / start_price) ** (1 / time) - 1
     return (end_price / start_price)**(1/time) - 1
 
 
@@ -60,7 +60,7 @@ def difference_date(date, time):
 
 
 def risk_corr(asset_series_dict):
-    print asset_series_dict
+   # print asset_series_dict
     rend_dict = dict()
     risks = dict()
     for asset in asset_series_dict:
@@ -99,11 +99,11 @@ def risk_asset(asset_df):
         z = asset_df[(pd.to_datetime(asset_df["date"]).dt.year == date.year) &
                      (pd.to_datetime(asset_df["date"]).dt.month == date.month)]
         y = z["price"]
-        print y.iloc[len(y) - 1], y.iloc[0]
+        #print y.iloc[len(y) - 1], y.iloc[0]
         rend = (y.iloc[len(y) - 1] / y.iloc[0]) - 1
         month_rend.append(rend)
         date += relativedelta(months=+1)
-    print "Month rend", month_rend
+    #print "Month rend", month_rend
     risk = stdev(month_rend) * sqrt(12)
 
     return risk
@@ -129,7 +129,7 @@ def return_assets(asset_series_dict, start_date, end_date):
     an_returns = dict()
     for asset in asset_series_dict:
         asset_f = asset_series_dict[asset]
-        print asset_f.iloc[0]["price"], asset_f.iloc[len(asset_f)-1]["price"]
+        #print asset_f.iloc[0]["price"], asset_f.iloc[len(asset_f)-1]["price"]
         ab_returns[asset] = absolute_return(asset_f.iloc[0]["price"], asset_f.iloc[len(asset_f)-1]["price"])
         an_returns[asset] = annualized_return(asset_f.iloc[0]["price"], asset_f.iloc[len(asset_f)-1]["price"], time)
     return an_returns, ab_returns

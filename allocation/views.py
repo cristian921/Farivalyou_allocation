@@ -295,13 +295,13 @@ def objectives_allocation_fun(request):
 
         for obKey in objectives:
             start_date = difference_date(today, objectives[obKey]["time_horizon"])
-            print "start date", start_date
-            print "week", start_date.weekday()
+            #print "start date", start_date
+           # print "week", start_date.weekday()
             while start_date.weekday() > 4:
-                print "qui"
+            #    print "qui"
                 start_date += relativedelta(days=-1)
 
-            print "start date1", start_date
+           # print "start date1", start_date
             in_prices = Series.objects.filter(asset__portfolioasset__aggregated_portfolio=portfolio,
                                               date=start_date).order_by('-date')
 
@@ -389,7 +389,7 @@ def view_objective_allocation(request):
             start_date = difference_date(today, os.objective.time_horizon)
             while start_date.weekday() > 4:
                 start_date += relativedelta(days=-1)
-            print start_date
+            #print start_date
 
             portfolios[os.id] = portfolio
             prices = Series.objects.filter(asset__objectiveportfolioasset__objective_solution_id=os.id, date=today)
@@ -406,7 +406,7 @@ def view_objective_allocation(request):
             for ap in portfolio:
                 asset_series_dict[ap.asset.codec] = pd.DataFrame(list(
                     asset_series.filter(asset=ap.asset).values()))
-            print asset_series_dict
+            #print asset_series_dict
             risks, corr = risk_corr(asset_series_dict)
             risks_sol[os.id] = risks
             an_returns, ab_returns = return_assets(asset_series_dict, start_date, today)
@@ -415,8 +415,8 @@ def view_objective_allocation(request):
             p_risk[os.id] = portfolio_risk(risks, corr, weights_in)
     for p in portfolio_user:
         quotes_remaining[p.asset.codec] = p.quote - quotes_used[p.asset.codec]
-    print json.dumps(risks_sol, indent=2)
-    print json.dumps(return_annu, indent=2)
+    #print json.dumps(risks_sol, indent=2)
+    #print json.dumps(return_annu, indent=2)
 
     x_values, y_values = zip(*values.items())
     x_values = [get_object_or_404(ObjectiveSolution, pk=i).objective.finality for i in x_values]

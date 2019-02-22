@@ -3,7 +3,7 @@ import json
 
 
 def objectives_allocation(corr, objectives_x, assets):
-    print json.dumps(assets, indent=2)
+    #print json.dumps(assets, indent=2)
     objectives = {k: v for k, v in objectives_x.iteritems() if v["value_minus_savings"] != 0}
 
     def funct(quotes):
@@ -113,15 +113,15 @@ def objectives_allocation(corr, objectives_x, assets):
     if len(feasible_solutions) > 0:
         info = "feasible"
         ob = feasible_solutions[0].variables
-        print feasible_solutions[0].variables
-        print feasible_solutions[0].constraints
-        print feasible_solutions[0].objectives
+        #print feasible_solutions[0].variables
+        #print feasible_solutions[0].constraints
+        #print feasible_solutions[0].objectives
     else:
         info = "not feasible"
         ob = algorithm.result[0].variables
-        print algorithm.result[0].variables
-        print algorithm.result[0].constraints
-        print algorithm.result[0].objectives
+        #print algorithm.result[0].variables
+        #print algorithm.result[0].constraints
+        #print algorithm.result[0].objectives
 
     i = 0
     for obk in objectives:
