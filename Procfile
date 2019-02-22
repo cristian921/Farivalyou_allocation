@@ -1,1 +1,1 @@
-web: gunicorn allocation.wsgi --log-file -
+web: gunicorn Farivalyou_allocation.wsgi --log-file -
