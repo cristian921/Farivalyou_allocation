@@ -25,7 +25,7 @@ SECRET_KEY = 'xt8^h!!++48+u1s4yex@z@#2-s^@$^z4^xh)@wl@i#mxh%s+1m'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['0.0.0.0', 'localhost', 'dfmob.herokuapp.com']
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'dfmob.herokuapp.com', '0.0.0.0']
 
 
 # Application definition
