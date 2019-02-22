@@ -1,1 +1,2 @@
 web: gunicorn allocation.wsgi --log-file -
+web: bundle exec rails server -p $PORT
